@@ -8,17 +8,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('angular2/core');
+var TodosList_1 = require('./TodosList');
+var Todo_1 = require('./Todo');
+var AddToTodo_1 = require('./AddToTodo');
 var AppComponent = (function () {
     function AppComponent() {
-        this.todos = ["Todo 1", "Todo 2", "Todo 3"];
+        this.todos = [
+            new Todo_1.Todo("First item", "first description", "Andy H"),
+            new Todo_1.Todo("Second item", "second description", "Bobby Dazzler"),
+            new Todo_1.Todo("Third item", "third description", "Jimmy Riddle")
+        ];
     }
-    AppComponent.prototype.addTodo = function (todo) {
-        this.todos.push(todo);
+    AppComponent.prototype.incompleteTodos = function () {
+        var count;
+        count = 0;
+        for (var _i = 0, _a = this.todos; _i < _a.length; _i++) {
+            var t = _a[_i];
+            if (!t.completed) {
+                count++;
+            }
+        }
+        return count;
     };
     AppComponent = __decorate([
         core_1.Component({
-            selector: 'my-app',
-            template: "\n    <h4> Todos List</h4>\n    <h5>Number of Todos: <span class=\"badge\">{{todos.length}}</span></h5>\n    <ul class=\"list-group\">\n        <li *ngFor=\"#todo of todos\" class=\"list-group-item\">\n            {{todo}}\n        </li>\n    </ul>\n    <div class=\"form-inline\">\n        <input class=\"form-control\" #todotext>\n        <button class=\"btn btn-default\" (click)=\"addTodo(todotext.value)\">Add to</button>\n    </div>\n    "
+            selector: 'my-app'
+        }),
+        core_1.View({
+            template: "\n            <h4>Todos List</h4>\n            <h5>Number of Todos: <span class=\"badge\">{{incompleteTodos()}}</span><h5>\n            <todos-list [todos]=\"todos\"></todos-list>\n            <add-todo [todos]=\"todos\"></add-todo>\n        ",
+            directives: [TodosList_1.TodosList, AddToTodo_1.AddTodo]
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);

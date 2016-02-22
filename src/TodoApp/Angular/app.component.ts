@@ -1,30 +1,44 @@
-﻿import {Component} from 'angular2/core';
+﻿import {Component, View} from 'angular2/core';
+import {TodosList} from './TodosList';
+import {Todo} from './Todo';
+import {AddTodo} from './AddToTodo';
 
 @Component({
-    selector: 'my-app',
-    template: `
-    <h4> Todos List</h4>
-    <h5>Number of Todos: <span class="badge">{{todos.length}}</span></h5>
-    <ul class="list-group">
-        <li *ngFor="#todo of todos" class="list-group-item">
-            {{todo}}
-        </li>
-    </ul>
-    <div class="form-inline">
-        <input class="form-control" #todotext>
-        <button class="btn btn-default" (click)="addTodo(todotext.value)">Add to</button>
-    </div>
-    `
+    selector: 'my-app'
+})
+
+@View({
+        template: `
+            <h4>Todos List</h4>
+            <h5>Number of Todos: <span class="badge">{{incompleteTodos()}}</span><h5>
+            <todos-list [todos]="todos"></todos-list>
+            <add-todo [todos]="todos"></add-todo>
+        `,
+        directives: [TodosList, AddTodo]
 })
 
 export class AppComponent {
-    todos: Array<string>;
+    todos: Array<Todo>;
 
     constructor() {
-        this.todos = ["Todo 1", "Todo 2", "Todo 3"];
+        this.todos = [
+            new Todo("First item", "first description", "Andy H"),
+            new Todo("Second item", "second description", "Bobby Dazzler"),
+            new Todo("Third item", "third description", "Jimmy Riddle")
+        ];
     }
 
-    addTodo(todo: string) {
-        this.todos.push(todo);
+    incompleteTodos() {
+        var count: number;
+
+        count = 0;
+
+        for (var t of this.todos) {
+            if (!t.completed) {
+                count++;
+            }
+        }
+
+        return count;
     }
 }
